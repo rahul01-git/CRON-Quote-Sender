@@ -7,6 +7,7 @@ const { fetchQuote } = require("./helper/fetchQuote");
 const routes = require("./routes");
 
 const dotenv = require("dotenv");
+const { decryptData } = require("./helper/encrypt-decrypt");
 dotenv.config();
 
 const app = express();
@@ -23,7 +24,12 @@ cron.schedule(
   async () => {
     const data = await fetchQuote();
     let fileData = fs.readFileSync("subscribers.txt", "utf-8");
-    const emails = fileData.split("\n").map((line) => line.trim());
+    const emails = fileData
+      .split("\n")
+      .map((line) => {
+        if(line) return decryptData(line.trim(), process.env.SECRET_KEY)
+        else return null
+      });
     sendEmail(data, emails);
   },
   {

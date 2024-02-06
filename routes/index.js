@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require('fs')
-const {encryptData, decryptData} = require('../helper/encrypt-decrypt')
+const {encryptData} = require('../helper/encrypt-decrypt')
 
 router.get("/", (req, res) => {
   res.render("home");
